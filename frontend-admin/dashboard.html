@@ -1,0 +1,542 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AgriMarket - Admin Dashboard</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            display: flex;
+            height: 100vh;
+            background: #f4f6f9;
+        }
+        
+        /* Sidebar */
+        .sidebar {
+            width: 280px;
+            background: linear-gradient(135deg, #2c3e50, #34495e);
+            color: white;
+            padding: 20px;
+        }
+        
+        .sidebar h2 {
+            text-align: center;
+            margin-bottom: 30px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid #3498db;
+        }
+        
+        .sidebar h2 span {
+            color: #3498db;
+        }
+        
+        .menu-item {
+            padding: 12px 15px;
+            margin: 5px 0;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+        
+        .menu-item:hover {
+            background: #3498db;
+        }
+        
+        .menu-item.active {
+            background: #3498db;
+        }
+        
+        .menu-item i {
+            margin-right: 10px;
+            width: 20px;
+            display: inline-block;
+        }
+        
+        /* Main Content */
+        .main-content {
+            flex: 1;
+            padding: 20px;
+            overflow-y: auto;
+        }
+        
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: white;
+            padding: 15px 25px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            margin-bottom: 25px;
+        }
+        
+        .header h1 {
+            color: #2c3e50;
+            font-size: 24px;
+        }
+        
+        .user-info {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+        
+        .user-info span {
+            color: #666;
+        }
+        
+        .user-info button {
+            padding: 8px 15px;
+            background: #e74c3c;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+        
+        .user-info button:hover {
+            background: #c0392b;
+        }
+        
+        /* Stats Cards */
+        .stats-container {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+        
+        .stat-card {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        
+        .stat-card h3 {
+            color: #666;
+            font-size: 14px;
+            margin-bottom: 10px;
+        }
+        
+        .stat-card .number {
+            color: #2c3e50;
+            font-size: 28px;
+            font-weight: bold;
+        }
+        
+        .stat-card .trend {
+            color: #27ae60;
+            font-size: 12px;
+            margin-top: 5px;
+        }
+        
+        
+
+        /* Tables */
+        
+
+        .table-container {
+            background: white;
+            border-radius: 10px;
+            padding: 20px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            margin-bottom: 30px;
+        }
+        
+        .table-container h2 {
+            color: #2c3e50;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid #ecf0f1;
+        }
+        
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        
+        th {
+            text-align: left;
+            padding: 12px;
+            background: #f8f9fa;
+            color: #2c3e50;
+            font-weight: 600;
+        }
+        
+        td {
+            padding: 12px;
+            border-bottom: 1px solid #ecf0f1;
+            color: #555;
+        }
+        
+        .status-badge {
+            padding: 5px 10px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 600;
+        }
+        
+        .status-active {
+            background: #d4edda;
+            color: #155724;
+        }
+        
+        .status-pending {
+            background: #fff3cd;
+            color: #856404;
+        }
+        
+        .action-btn {
+            padding: 5px 10px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            margin: 0 2px;
+            font-size: 12px;
+        }
+        
+        .btn-approve {
+            background: #27ae60;
+            color: white;
+        }
+        
+        .btn-reject {
+            background: #e74c3c;
+            color: white;
+        }
+        
+        .btn-view {
+            background: #3498db;
+            color: white;
+        }
+        
+        .btn-approve:hover {
+            background: #219a52;
+        }
+        
+        .btn-reject:hover {
+            background: #c0392b;
+        }
+        
+        .btn-view:hover {
+            background: #2980b9;
+        }
+
+        /* Currency style */
+        .currency {
+            font-weight: 600;
+            color: #2c3e50;
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Sidebar -->
+    <div class="sidebar">
+        <h2>Agri<span>Market</span></h2>
+        
+        <div class="menu-item active">
+            <i>📊</i> Dashboard
+        </div>
+        <div class="menu-item">
+            <i>👥</i> Users
+        </div>
+        <div class="menu-item">
+            <i>🌾</i> Products
+        </div>
+        <div class="menu-item">
+            <i>💰</i> Transactions
+        </div>
+        <div class="menu-item">
+            <i>📱</i> Messages
+        </div>
+        <div class="menu-item">
+            <i>📈</i> Reports
+        </div>
+        <div class="menu-item">
+            <i>⚙️</i> Settings
+        </div>
+    </div>
+    
+    <!-- Main Content -->
+    <div class="main-content">
+        <div class="header">
+            <h1>Dashboard Overview</h1>
+            <div class="user-info">
+                <span>Welcome, Admin</span>
+                <button onclick="logout()">Logout</button>
+            </div>
+        </div>
+        
+        <!-- Stats Cards - Updated with SLE currency -->
+        <div class="stats-container">
+            <div class="stat-card">
+                <h3>Total Users</h3>
+                <div class="number">1,247</div>
+                <div class="trend">↑ 12% this month</div>
+            </div>
+            
+            <div class="stat-card">
+                <h3>Active Products</h3>
+                <div class="number">843</div>
+                <div class="trend">↑ 8% this week</div>
+            </div>
+            
+            <div class="stat-card">
+                <h3>Transactions</h3>
+                <div class="number"><span class="currency">SLE</span> 2.4M</div>
+                <div class="trend">↑ 15% this month</div>
+            </div>
+            
+            <div class="stat-card">
+                <h3>Pending Approvals</h3>
+                <div class="number">23</div>
+                <div class="trend">↓ 5 from yesterday</div>
+            </div>
+        </div>
+
+        <!-- Pending Farmer Verifications Table -->
+<div class="table-container">
+    <h2>Pending Farmer Verifications</h2>
+    <table id="pending-farmers-table">
+        <thead>
+            <tr>
+                <th>Name</th>
+                <th>Phone</th>
+                <th>Location</th>
+                <th>Registered</th>
+                <th>Status</th>
+                <th>Action</th>
+            </tr>
+        </thead>
+        <tbody>
+            <!-- Rows will be filled by JavaScript -->
+            <tr>
+                <td colspan="6" style="text-align: center;">Loading farmers...</td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+
+<!-- Recent Products Table -->
+<div class="table-container">
+    <h2>Recent Product Listings</h2>
+    <table id="recent-products-table">
+        <thead>
+            <tr>
+                <th>Product</th>
+                <th>Farmer</th>
+                <th>Category</th>
+                <th>Price</th>
+                <th>Quantity</th>
+                <th>Status</th>
+            </tr>
+        </thead>
+        <tbody>
+            <!-- Rows will be filled by JavaScript -->
+            <tr>
+                <td colspan="6" style="text-align: center;">Loading products...</td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+        
+        
+    
+   <script>
+    // ============================================
+    // AGRIMARKET DASHBOARD - WITH AUTHENTICATION
+    // ============================================
+    
+    // Check if user is logged in
+    const token = localStorage.getItem('token');
+    const user = JSON.parse(localStorage.getItem('user') || '{}');
+
+    if (!token) {
+        window.location.href = 'login.html';
+    }
+
+    // Display user info in header
+    document.addEventListener('DOMContentLoaded', function() {
+        const userInfo = document.querySelector('.user-info span');
+        if (userInfo && user.name) {
+            userInfo.textContent = `Welcome, ${user.name}`;
+        }
+    });
+
+    const API_URL = 'http://localhost:5000/api';
+
+    // Helper function to add auth token to all requests
+    async function fetchWithAuth(url, options = {}) {
+        return fetch(url, {
+            ...options,
+            headers: {
+                ...options.headers,
+                'Authorization': `Bearer ${token}`,
+                'Content-Type': 'application/json'
+            }
+        });
+    }
+
+    // Load dashboard data when page opens
+    window.onload = function() {
+        console.log("🔄 Dashboard loading...");
+        loadStats();
+        loadPendingFarmers();
+        loadRecentProducts();
+    };
+    
+    // Load statistics cards
+    async function loadStats() {
+        try {
+            const response = await fetch(`${API_URL}/stats`);
+            const stats = await response.json();
+            console.log("📊 Stats received:", stats);
+            
+            const statNumbers = document.querySelectorAll('.stat-card .number');
+            if (statNumbers.length >= 4) {
+                statNumbers[0].textContent = stats.totalUsers;
+                statNumbers[1].textContent = stats.activeProducts;
+                statNumbers[2].innerHTML = `<span class="currency">SLE</span> 2.4M`;
+                statNumbers[3].textContent = stats.pendingApprovals;
+            }
+            
+        } catch (error) {
+            console.error('❌ Error loading stats:', error);
+        }
+    }
+    
+    // Load pending farmers (protected route - needs token)
+    async function loadPendingFarmers() {
+        try {
+            const response = await fetchWithAuth(`${API_URL}/pending-farmers`);
+            
+            if (response.status === 401 || response.status === 403) {
+                // Token invalid or not admin
+                alert('You do not have permission to view this page');
+                window.location.href = 'login.html';
+                return;
+            }
+            
+            const farmers = await response.json();
+            console.log("👥 Pending farmers received:", farmers);
+            
+            const tableBody = document.querySelector('#pending-farmers-table tbody');
+            if (!tableBody) return;
+            
+            tableBody.innerHTML = '';
+            
+            if (farmers.length === 0) {
+                tableBody.innerHTML = '<tr><td colspan="6" style="text-align: center;">No pending farmers</td></tr>';
+                return;
+            }
+            
+            farmers.forEach(farmer => {
+                const row = tableBody.insertRow();
+                row.innerHTML = `
+                    <td>${farmer.name}</td>
+                    <td>${farmer.phone}</td>
+                    <td>${farmer.location}</td>
+                    <td>${farmer.registered || '2026-03-14'}</td>
+                    <td><span class="status-badge status-pending">Pending</span></td>
+                    <td>
+                        <button class="action-btn btn-approve" onclick="approveFarmer(${farmer.id})">✓</button>
+                        <button class="action-btn btn-reject" onclick="rejectFarmer(${farmer.id})">✗</button>
+                        <button class="action-btn btn-view" onclick="viewFarmer(${farmer.id})">👁️</button>
+                    </td>
+                `;
+            });
+            
+        } catch (error) {
+            console.error('❌ Error loading farmers:', error);
+        }
+    }
+    
+    // Load recent products
+    async function loadRecentProducts() {
+        try {
+            const response = await fetch(`${API_URL}/recent-products`);
+            const products = await response.json();
+            console.log("🌾 Products received:", products);
+            
+            const tableBody = document.querySelector('#recent-products-table tbody');
+            if (!tableBody) return;
+            
+            tableBody.innerHTML = '';
+            
+            products.forEach(product => {
+                const row = tableBody.insertRow();
+                row.innerHTML = `
+                    <td>${product.name}</td>
+                    <td>${product.farmer}</td>
+                    <td>${product.category}</td>
+                    <td><span class="currency">SLE</span> ${product.price}/${product.unit}</td>
+                    <td>${product.quantity} ${product.unit}</td>
+                    <td><span class="status-badge status-active">Active</span></td>
+                `;
+            });
+            
+        } catch (error) {
+            console.error('❌ Error loading products:', error);
+        }
+    }
+    
+    // Approve farmer function (protected)
+    async function approveFarmer(farmerId) {
+        try {
+            const response = await fetchWithAuth(`${API_URL}/approve-farmer/${farmerId}`, {
+                method: 'POST'
+            });
+            
+            const result = await response.json();
+            if (result.success) {
+                alert(result.message);
+                loadPendingFarmers();
+                loadStats();
+            }
+        } catch (error) {
+            console.error('❌ Error approving farmer:', error);
+            alert('Error approving farmer. Make sure server is running.');
+        }
+    }
+    
+    // Reject farmer function
+    async function rejectFarmer(farmerId) {
+        if(confirm('Are you sure you want to reject this farmer?')) {
+            alert('Reject function will be implemented later');
+            loadPendingFarmers();
+        }
+    }
+    
+    // View farmer function
+    function viewFarmer(farmerId) {
+        fetch(`${API_URL}/users/${farmerId}`)
+            .then(response => response.json())
+            .then(user => {
+                alert(`Farmer Details:\nName: ${user.name}\nPhone: ${user.phone}\nLocation: ${user.location}\nEmail: ${user.email}`);
+            })
+            .catch(error => {
+                alert(`Viewing details for farmer ID: ${farmerId}`);
+            });
+    }
+    
+    // Logout function
+    function logout() {
+        if(confirm('Are you sure you want to logout?')) {
+            localStorage.removeItem('token');
+            localStorage.removeItem('user');
+            window.location.href = 'login.html';
+        }
+    }
+</script>
+</body>
+</html>

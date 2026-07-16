@@ -1,0 +1,45 @@
+name: mobile_app
+description: AgriMarket - Agricultural Marketplace for Sierra Leone
+publish_to: 'none'
+version: 1.0.0+1
+
+environment:
+  sdk: ">=3.3.0 <4.0.0"
+
+dependencies:
+  flutter:
+    sdk: flutter
+  
+  # HTTP & Networking
+  http: ^1.1.0
+  
+  # Storage
+  shared_preferences: ^2.2.0
+  
+  # Images
+  cached_network_image: ^3.3.0
+  image_picker: ^1.0.5
+  
+  # UI
+  flutter_spinkit: ^5.2.0
+  dropdown_button2: ^2.3.9
+  
+  # Location & Maps (ADD THESE)
+  geolocator: ^12.0.0
+  geocoding: ^3.0.0
+  permission_handler: ^11.3.1
+  
+  # Local Notifications
+  flutter_local_notifications: ^17.2.3
+  
+  # Firebase
+  firebase_core: ^3.8.0
+  firebase_messaging: ^15.1.5
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^3.0.0
+
+flutter:
+  uses-material-design: true
